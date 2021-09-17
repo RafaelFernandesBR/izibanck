@@ -3,6 +3,7 @@ package br.com.izidrocop.izibanck.controler;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +22,13 @@ public class ContaController {
 	}
 
 	@GetMapping("/contas/{numero}")
-	public Conta reculperarNumero(@PathVariable int numero) {
-		return dao.findById(numero).get();
+	public ResponseEntity<Conta> reculperarNumero(@PathVariable int numero) {
+		Conta resultado=dao.findById(numero).orElse(null);
+		if(resultado != null) {
+			return ResponseEntity.ok(resultado);
+		}
+		else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 }
